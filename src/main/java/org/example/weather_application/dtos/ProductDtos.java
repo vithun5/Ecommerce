@@ -1,15 +1,12 @@
-package org.example.weather_application.Model;
+package org.example.weather_application.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Product {
+public class ProductDtos {
     private int id;
     private String name;
     private String imageUrl;
-    private String description;
-    private double price;
-
 }
