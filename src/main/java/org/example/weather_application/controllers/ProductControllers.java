@@ -6,6 +6,8 @@ import org.example.weather_application.dtos.ProductDtos;
 import org.example.weather_application.services.ProductServices;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 public class ProductControllers {
@@ -18,7 +20,7 @@ public class ProductControllers {
     }
 
     @GetMapping("/{id}")
-    public ProductDtos getProductById(@PathVariable("id") Long id ){
+    public ProductDtos getProductById(@PathVariable("id") Long id ) throws Exception{
 //        System.out.println("get method "+product.getName());
         return productService.getProductDtos(id);
     }
@@ -27,8 +29,14 @@ public class ProductControllers {
     @ResponseBody
     @PostMapping("")
     public Product createProduct(@RequestBody Product product){
-        System.out.println("nammemee "+product.getName());
+
         return product ;
     }
+    // Get all Products
+    @GetMapping("")
+    public List<ProductDtos> getAllProducts(){
+       return productService.getAllProducts();
+    }
+
 
 }
