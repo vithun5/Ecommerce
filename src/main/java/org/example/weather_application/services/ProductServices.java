@@ -1,19 +1,48 @@
 package org.example.weather_application.services;
 
+import lombok.Data;
 import org.example.weather_application.dtos.ProductDtos;
+import org.example.weather_application.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
+
 public class ProductServices {
+    RestTemplate restTemplate = new RestTemplate();
+    public ProductDtos  getProductDtos(Long id) throws NotFoundException {
+         // getting products based on id
+        String Url = "https://fakestoreapi.com/products/" + id;
+        ProductDtos productDtos = restTemplate.getForObject(Url, ProductDtos.class);
+        if(productDtos == null){
+            throw new NotFoundException();
+        }
+        return convertToDtos(productDtos);
 
-    public ProductDtos getProductDtos(Long id) {
+    }
 
-        // Call DB here
+    //converting to dto values
+    public ProductDtos convertToDtos(ProductDtos productDtos) {
         ProductDtos obj = new ProductDtos();
-        obj.setId(1);
-        obj.setName("vithun");
-        obj.setImageUrl("www.apple.com");
-        return obj;
+        obj.setId(productDtos.getId());
+        obj.setTitle(productDtos.getTitle());
+        obj.setImage(productDtos.getImage());
+        return productDtos;
+    }
 
+    // for getting all Products
+    public List<ProductDtos> getAllProducts(){
+
+        String Url = "https://fakestoreapi.com/products";
+        ProductDtos[] products = restTemplate.getForObject(Url, ProductDtos[].class);
+        ArrayList<ProductDtos> returnedProducts = new ArrayList<>();
+        for(ProductDtos product : products){
+            returnedProducts.add(convertToDtos(product));
+        }
+        return returnedProducts;
     }
 }
